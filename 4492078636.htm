@@ -1,0 +1,1334 @@
+<style type="text/css">
+			
+			html, body, div, span, applet, object, iframe, h1, h2, h3,
+h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address,
+big, cite, code, del, dfn, em, font, img, ins, kbd,
+q, s, samp, small, strike, strong, sub, sup, tt, var,
+dl, dt, dd, ol, ul, li, fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-weight: inherit;
+	font-style: inherit;
+	font-size: 100%;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+:focus {
+	outline: 0;
+}
+
+ol, ul {
+	list-style: none;
+}
+
+caption {
+  font-weight: bold;
+  text-align: left;
+  border-width: 1px;
+  padding: .2em .2em;
+  border: 1px solid #fff;
+  font-size: 1.1em;
+}
+
+body {
+	font-size: 12px;
+	background-color: transparent;
+	overflow: auto;
+	lineheight: 1;
+	color: #333;
+}
+
+/* tables still need 'cellspacing="0"' in the markup */
+
+.hl7title {
+	font-size: 12pt;
+	font-weight: bold;
+	padding-bottom: 0.5em;
+	text-align: center;
+	width: 100%;
+	display: none;
+}
+
+.hl7tableWrapper {
+	position: absolute;
+	top: 0;
+	left: 0;
+	min-width: 100%;
+	background: #ffffff;
+}
+
+.hl7tableWrapper table {
+	border-collapse: collapse;
+	border-spacing: 0;
+	width: 100%;
+	border: none;
+}
+
+.hl7_header {
+	padding: 5px 0;
+}
+
+.hl7_footer {
+  font-style: italic;
+  padding-left: 5px;
+}
+
+.hl7HeaderNotes {
+	text-indent: 10px;
+	font-style: italic;
+}
+
+.hl7_header div {
+	line-height: 150%;
+	margin-bottom: 10px;
+}
+
+.hl7tableWrapper th {
+	padding: 3px 5px;
+	background: #EBF4FA;
+	border-top: 1px solid #516273;
+	border-bottom: 1px solid #516273;
+	text-align: left;
+}
+
+.hl7NugSep {
+	border-bottom: 1px solid #DCDCDC;
+}
+
+.hl7NoteRow {
+	padding: 3px 15px;
+	white-space: pre-wrap;
+}
+
+.hl7tableWrapper td {
+	padding: 4px 5px 0;
+	color: #333;
+}
+
+.hl7tableWrapper .spCol {
+	padding: 0;
+}
+
+.obxRow .hl7FirstCol, .obrNoteRow .hl7FirstCol {
+	padding-left: 20px;
+	min-width: 200px;
+}
+
+.obxRow .hl7SubIDCol {
+	padding-left: 10px;
+	font-weight: bold;
+}
+
+.obxRow .abnVal {
+	color: red;
+}
+
+.hl7PatientInfo {
+	font-weight: bold;
+	padding-bottom: 3px;
+	padding-top: 3px;
+}
+
+.hl7LabInfo td {
+	font-size: 11px;
+	color: #696969;
+}
+
+.obrName td {
+	font-weight: bold;
+	color: #2D4663;
+	padding-top: 15px;
+}
+
+.obrSpec td,
+.obrNoteRow td,
+.obsNoteRow td {
+	font-family: Lucida Console;
+	padding-left: 30px;
+	color: #4169E1;
+}
+
+.obsNoteRow .hl7NoteRow {
+	padding-left: 10px;
+}
+
+.superScript {
+	font-size: 10px;
+}
+
+.labHeader {
+	padding-left: 5px;
+	font-weight: bold;
+}
+
+.labTable {
+	padding: 25px 0 10px
+}
+
+.labTable div {
+	display: inline;
+}
+
+.obrParentResult td {
+	color: #0000FF;
+	font-style: italic;
+	font-weight: normal;
+	padding-left: 15px;
+}
+
+.flagsLegend {
+padding: 25px 0 0;
+}
+
+.flags {
+	padding: 5px 30px 0 50px;
+	text-align: center;
+}
+
+.flag {
+	display: inline-block;
+	padding: 0 20px 5px 0;
+	font-weight: bold;
+}
+
+.resRow td {
+	padding-left: 10px;
+}
+
+.resRow.obrParentResult td {
+	padding-left: 20px;
+}
+
+.obsTable table {
+	margin-left: 25px;
+	width: auto;
+}
+
+.obsTable td {
+	padding: 4px 3px 2px;
+}
+
+.obsRow .obsDesc {
+	min-width: 150px;
+	max-width: 300px;
+	overflow: hidden;
+	white-space: normal;
+}
+
+.obsRow .resResultFirstCol {
+	width: 50px;
+	vertical-align: bottom;
+}
+
+.obsRow div {
+	display: inline-block;
+}
+
+.obsRow .obsResultHeader div {
+	max-width: 87px;
+}
+
+.obsRow .obsResultFlag div {
+	max-width: 26px;
+}
+
+.obsRow .obsResultValue div {
+	max-width: 62px;
+}
+
+.obsRow.headerRow td {
+	font-weight: bold;
+}
+
+.obsRow.evenObsRow td {
+	background-color: #DCDCDC;
+}
+
+
+.obsTable table {
+	white-space: nowrap;
+}
+
+.obsRow div {
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+}
+			
+		</style>
+<div class="hl7tableWrapper">
+  <div class="hl7title">Order Results</div>
+  <div id="hl7_header" class="hl7_header">
+    <table class="header" width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr class="page-break">
+        <td class="hl7PatientInfo"> Patient: </td>
+        <td class="hl7PatientInfo">PAL, GOURAV</td>
+        <td class="hl7LabInfo"> Lab Order #: </td>
+        <td class="hl7LabInfo">2500303907</td>
+      </tr>
+      <tr class="page-break">
+        <td class="hl7PatientInfo"> DOB: </td>
+        <td class="hl7PatientInfo">10/31/2004</td>
+        <td class="hl7LabInfo"> Clinical Order #: </td>
+        <td class="hl7LabInfo">0005827370</td>
+      </tr>
+      <tr class="page-break">
+        <td class="hl7PatientInfo"> Sex: </td>
+        <td class="hl7PatientInfo">Male-M</td>
+        <td class="hl7LabInfo"> Report Date: </td>
+        <td class="hl7LabInfo">Mon 01/06/2025 14:52:00</td>
+      </tr>
+      <tr class="page-break">
+        <td class="hl7PatientInfo"> MRN: </td>
+        <td class="hl7PatientInfo">
+        </td>
+        <td class="hl7LabInfo"> Observation Date: </td>
+        <td class="hl7LabInfo">Fri 01/03/2025 11:14:00</td>
+      </tr>
+      <tr class="page-break">
+        <td class="hl7PatientInfo"> Ordering Provider: </td>
+        <td class="hl7PatientInfo">PATEL, ASHISH</td>
+        <td class="hl7LabInfo"> Received Date: </td>
+        <td class="hl7LabInfo">Sat 01/04/2025 4:14:00</td>
+      </tr>
+    </table>
+  </div>
+  <div class="hl7HeaderNotes"></div>
+  <table class="orderDetails" border="0">
+    <tr class="page-break">
+      <th class="hl7FirstCol"> Description </th>
+      <th> Out-of-Range </th>
+      <th> In-Range </th>
+      <th> Units </th>
+      <th> Expected </th>
+      <th> Flag</th>
+      <th> Status</th>
+    </tr>
+    <tr class="obrName page-break">
+      <td colspan="6">0947 MICROALBUMIN/CREATINE RAT</td>
+      <td title="Final result; results stored and verified.">F</td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">212 - MICROALBUMIN,URINE<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">10</td>
+      <td class="">mg/L</td>
+      <td class="">0-29</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">497A - CREATININE,URINE<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">203</td>
+      <td class="">mg/dL</td>
+      <td class="">20-300</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">556 - MICROALB/CREAT RATIO<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">5</td>
+      <td class="">mg/g</td>
+      <td class="">0-29</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="obrSpec page-break">
+      <td colspan="100%" class="hl7NoteRow" style="padding-left:20px">NORMAL                  <30 mg/g creatinine</td>
+    </tr>
+    <tr class="obrSpec page-break">
+      <td colspan="100%" class="hl7NoteRow" style="padding-left:20px">MICROALBUMINURIA        30-299 mg/g creatinine</td>
+    </tr>
+    <tr class="obrSpec page-break">
+      <td colspan="100%" class="hl7NoteRow" style="padding-left:20px">CLINICAL ALBUMINURIA    >=300 mg/g creatinine</td>
+    </tr>
+    <tr class="obrSpec page-break">
+      <td colspan="100%" class="hl7NoteRow" style="padding-left:20px">The ADA recommends that at least two of three specimens collected within</td>
+    </tr>
+    <tr class="obrSpec page-break">
+      <td colspan="100%" class="hl7NoteRow" style="padding-left:20px">3-6 month period be abnormal before considering a patient to be within a</td>
+    </tr>
+    <tr class="obrSpec page-break">
+      <td colspan="100%" class="hl7NoteRow" style="padding-left:20px">diagnostic category.</td>
+    </tr>
+    <tr class="obrName page-break">
+      <td colspan="6">995 VITAMIN D-25 HYDROXY</td>
+      <td title="Final result; results stored and verified.">F</td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">995 - VITAMIN D-25 HYDROXY<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">30.5</td>
+      <td class="">ng/mL</td>
+      <td class="">30.0-100.0</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="obrSpec page-break">
+      <td colspan="100%" class="hl7NoteRow" style="padding-left:20px">DEFICIENCY     <10 ng/mL</td>
+    </tr>
+    <tr class="obrSpec page-break">
+      <td colspan="100%" class="hl7NoteRow" style="padding-left:20px">INSUFFICIENCY  10-30 ng/mL</td>
+    </tr>
+    <tr class="obrSpec page-break">
+      <td colspan="100%" class="hl7NoteRow" style="padding-left:20px">SUFFICIENCY    30-100 ng/mL</td>
+    </tr>
+    <tr class="obrSpec page-break">
+      <td colspan="100%" class="hl7NoteRow" style="padding-left:20px">TOXICITY       >100 ng/mL</td>
+    </tr>
+    <tr class="obrSpec page-break">
+      <td colspan="100%" class="hl7NoteRow" style="padding-left:20px">Method: Quantitative chemiluminescent immunoassay.</td>
+    </tr>
+    <tr class="obrSpec page-break">
+      <td colspan="100%" class="hl7NoteRow" style="padding-left:20px">Source: Serum.</td>
+    </tr>
+    <tr class="obrName page-break">
+      <td colspan="6">20 CBC WITH AUTOMATED DIFF</td>
+      <td title="Final result; results stored and verified.">F</td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">400 - WBC<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">8.1</td>
+      <td class="">10^3/uL</td>
+      <td class="">4.2-11.8</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol abnVal" style="padding-left:20px">401 -   RBC<sup class="superScript">1</sup></td>
+      <td class="abnVal">6.2</td>
+      <td class="abnVal"></td>
+      <td class="abnVal">10^6/uL</td>
+      <td class="abnVal">4.4-5.8</td>
+      <td class="abnVal" title="Above high normal">H</td>
+      <td class="abnVal" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol abnVal" style="padding-left:20px">402 - HEMOGLOBIN<sup class="superScript">1</sup></td>
+      <td class="abnVal">17.6</td>
+      <td class="abnVal"></td>
+      <td class="abnVal">g/dL</td>
+      <td class="abnVal">13.1-17.1</td>
+      <td class="abnVal" title="Above high normal">H</td>
+      <td class="abnVal" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">403 - HEMATOCRIT<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">48.5</td>
+      <td class="">%</td>
+      <td class="">40.0-50.4</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol abnVal" style="padding-left:20px">404 -   MCV<sup class="superScript">1</sup></td>
+      <td class="abnVal">78.6</td>
+      <td class="abnVal"></td>
+      <td class="abnVal">fL</td>
+      <td class="abnVal">80.8-97.4</td>
+      <td class="abnVal" title="Below low normal">L</td>
+      <td class="abnVal" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">405 -   MCH<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">28.6</td>
+      <td class="">pg</td>
+      <td class="">26.6-33.0</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol abnVal" style="padding-left:20px">406 -   MCHC<sup class="superScript">1</sup></td>
+      <td class="abnVal">36.3</td>
+      <td class="abnVal"></td>
+      <td class="abnVal">g/dL</td>
+      <td class="abnVal">32.0-34.9</td>
+      <td class="abnVal" title="Above high normal">H</td>
+      <td class="abnVal" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">446 -   RDW<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">13.1</td>
+      <td class="">%</td>
+      <td class="">11.8-15.5</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">407 - PLATELET<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">260</td>
+      <td class="">10^3/uL</td>
+      <td class="">147-365</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">447 -   MPV<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">7.7</td>
+      <td class="">fL</td>
+      <td class="">6.0-12.0</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">438 - NEUTROPHILS%<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">44.9</td>
+      <td class="">%</td>
+      <td class="">43.7-73.5</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">441 - NEUTROPHILS #<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">3.6</td>
+      <td class="">10^3/uL</td>
+      <td class="">1.9-7.5</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">439 -   LYMPHOCYTES %<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">34.4</td>
+      <td class="">%</td>
+      <td class="">17.9-45.1</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">442 -   LYMPHOCYTES #<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">2.8</td>
+      <td class="">10^3/uL</td>
+      <td class="">1.0-4.0</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">448 -   MONOCYTES %<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">5.1</td>
+      <td class="">%</td>
+      <td class="">3.8-10</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">451 -   MONOCYTES #<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">0.4</td>
+      <td class="">10^3/uL</td>
+      <td class="">0.2-0.9</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol abnVal" style="padding-left:20px">449 -   EOSINOPHILS %<sup class="superScript">1</sup></td>
+      <td class="abnVal">15.0</td>
+      <td class="abnVal"></td>
+      <td class="abnVal">%</td>
+      <td class="abnVal">0.0-6.1</td>
+      <td class="abnVal" title="Above high normal">H</td>
+      <td class="abnVal" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol abnVal" style="padding-left:20px">452 -   EOSINOPHILS #<sup class="superScript">1</sup></td>
+      <td class="abnVal">1.2</td>
+      <td class="abnVal"></td>
+      <td class="abnVal">10^3/uL</td>
+      <td class="abnVal">0.0-0.5</td>
+      <td class="abnVal" title="Above high normal">H</td>
+      <td class="abnVal" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">450 -   BASOPHILS %<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">0.6</td>
+      <td class="">%</td>
+      <td class="">0.0-1.3</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">453 -   BASOPHILS #<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">0.0</td>
+      <td class="">10^3/uL</td>
+      <td class="">0.0-0.1</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="obrName page-break">
+      <td colspan="6">12 COMPREHENSIVE METABOLIC</td>
+      <td title="Final result; results stored and verified.">F</td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">133 - SODIUM<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">140</td>
+      <td class="">mmol/L</td>
+      <td class="">136-145</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">134 - POTASSIUM<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">4.2</td>
+      <td class="">mmol/L</td>
+      <td class="">3.5-5.1</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">135 - CHLORIDE<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">104</td>
+      <td class="">mmol/L</td>
+      <td class="">98-107</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">130 - CARBON DIOXIDE<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">25</td>
+      <td class="">mEq/L</td>
+      <td class="">19-32</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">117 - GLUCOSE<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">98</td>
+      <td class="">mg/dL</td>
+      <td class="">65-99</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="obrSpec page-break">
+      <td colspan="100%" class="hl7NoteRow" style="padding-left:20px">Non-fasting reference interval: 65-139 mg/dL</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">136 - BUN<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">17</td>
+      <td class="">mg/dL</td>
+      <td class="">7-25</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">112 - CREATININE<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">0.8</td>
+      <td class="">mg/dL</td>
+      <td class="">0.7-1.3</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">166 - BUN/CREATININE RATIO<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">21</td>
+      <td class="">Ratio</td>
+      <td class="">8-28</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">129 - BILIRUBIN,Total<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">0.6</td>
+      <td class="">mg/dL</td>
+      <td class="">0.2-1.2</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">103 - CALCIUM<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">9.7</td>
+      <td class="">mg/dL</td>
+      <td class="">8.6-10.5</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">131 - PROTEIN TOTAL<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">6.9</td>
+      <td class="">g/dL</td>
+      <td class="">6.0-8.3</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">101 - ALBUMIN<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">4.4</td>
+      <td class="">g/dL</td>
+      <td class="">3.5-5.7</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">102 - ALK.PHOSPHATASE<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">77</td>
+      <td class="">U/L</td>
+      <td class="">20-130</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">106 - ALT (SGPT)<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">21</td>
+      <td class="">U/L</td>
+      <td class="">7-52</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">107 - AST (SGOT)<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">16</td>
+      <td class="">U/L</td>
+      <td class="">11-39</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">118 - GLOBULIN<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">2.5</td>
+      <td class="">g/dL</td>
+      <td class="">1.8-4.0</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">200 - A/G RATIO<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">1.8</td>
+      <td class="">Ratio</td>
+      <td class="">0.8-2.7</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">EGFR - eGFR<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">130</td>
+      <td class="">mL/min</td>
+      <td class="">>=60</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="obrSpec page-break">
+      <td colspan="100%" class="hl7NoteRow" style="padding-left:20px">GFR is estimated using the CKD-EPI Creatinine equation 2021. GFR units are</td>
+    </tr>
+    <tr class="obrSpec page-break">
+      <td colspan="100%" class="hl7NoteRow" style="padding-left:20px">in mL/min/1.73 square meters.</td>
+    </tr>
+    <tr class="obrName page-break">
+      <td colspan="6">38 LIPID PANEL</td>
+      <td title="Final result; results stored and verified.">F</td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">109 - CHOLESTEROL<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">152</td>
+      <td class="">mg/dl</td>
+      <td class=""><200</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="obrSpec page-break">
+      <td colspan="100%" class="hl7NoteRow" style="padding-left:20px">Desirable            <200  mg/dL</td>
+    </tr>
+    <tr class="obrSpec page-break">
+      <td colspan="100%" class="hl7NoteRow" style="padding-left:20px">ATP III Guidelines</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">132 - TRIGLYCERIDES<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">79</td>
+      <td class="">mg/dL</td>
+      <td class="">10-149</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">108 - HDL  CHOLESTEROL<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">42</td>
+      <td class="">mg/dL</td>
+      <td class="">>39</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">198 - LDL  CHOLESTEROL,calc.<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">94</td>
+      <td class="">mg/dL</td>
+      <td class=""><100</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="obrSpec page-break">
+      <td colspan="100%" class="hl7NoteRow" style="padding-left:20px"><100 mg/dL:     OPTIMAL</td>
+    </tr>
+    <tr class="obrSpec page-break">
+      <td colspan="100%" class="hl7NoteRow" style="padding-left:20px">ATP III Guidelines</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">804 - VLDL CHOLESTEROL,calc.<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">16</td>
+      <td class="">mg/dL</td>
+      <td class="">5-40</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="obrSpec page-break">
+      <td colspan="100%" class="hl7NoteRow" style="padding-left:20px">IDEAL FOR VLDL IS <40 mg/dL</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">255 - CHOLESTEROL/HDL RATIO<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">3.62</td>
+      <td class=""></td>
+      <td class="">2.00-5.00</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">NHDL - NON-HDL CHOLESTEROL, calc<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">110</td>
+      <td class="">mg/dL</td>
+      <td class="">0-130</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="obrSpec page-break">
+      <td colspan="100%" class="hl7NoteRow" style="padding-left:20px">NCEP guidelines:             mg/dL</td>
+    </tr>
+    <tr class="obrSpec page-break">
+      <td colspan="100%" class="hl7NoteRow" style="padding-left:20px">CHD and CHD Risk Equivalent < 130</td>
+    </tr>
+    <tr class="obrSpec page-break">
+      <td colspan="100%" class="hl7NoteRow" style="padding-left:20px">Multiple (2+) Risk Factors  < 160</td>
+    </tr>
+    <tr class="obrSpec page-break">
+      <td colspan="100%" class="hl7NoteRow" style="padding-left:20px">0-1 Risk Factor             < 190</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">424 - LDL/HDL RATIO<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">2.24</td>
+      <td class=""></td>
+      <td class="">0.00-4.97</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="obrName page-break">
+      <td colspan="6">119 HEMOGLOBIN A1c  (HGB AIC)</td>
+      <td title="Final result; results stored and verified.">F</td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">119 - HEMOGLOBIN A1c  (HGB AIC)<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">5.0</td>
+      <td class="">%</td>
+      <td class="">4.0-5.6</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="obrSpec page-break">
+      <td colspan="100%" class="hl7NoteRow" style="padding-left:20px">ADA Recommendations 12/29/2009</td>
+    </tr>
+    <tr class="obrSpec page-break">
+      <td colspan="100%" class="hl7NoteRow" style="padding-left:20px">Non-Diabetic           A1c about 5.0%</td>
+    </tr>
+    <tr class="obrSpec page-break">
+      <td colspan="100%" class="hl7NoteRow" style="padding-left:20px">Pre-Diabetic           A1c range 5.7% - 6.4%</td>
+    </tr>
+    <tr class="obrSpec page-break">
+      <td colspan="100%" class="hl7NoteRow" style="padding-left:20px">Diagnosis of Diabetes  A1c  >=   6.5%</td>
+    </tr>
+    <tr class="obrSpec page-break">
+      <td colspan="100%" class="hl7NoteRow" style="padding-left:20px">Diabetic Maintenance   A1c  <=   7.0%</td>
+    </tr>
+    <tr class="obrSpec page-break">
+      <td colspan="100%" class="hl7NoteRow" style="padding-left:20px">Source: Whole blood</td>
+    </tr>
+    <tr class="obrSpec page-break">
+      <td colspan="100%" class="hl7NoteRow" style="padding-left:20px">Method: Capillary electrophoresis</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">146N - TSH 3RD GENERATION<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">3.239</td>
+      <td class="">uIU/mL</td>
+      <td class="">0.34-4.41</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">252 - FREE T4<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">0.89</td>
+      <td class="">ng/dL</td>
+      <td class="">0.54-1.24</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="obrName page-break">
+      <td colspan="6">030 URINALYSIS</td>
+      <td title="Final result; results stored and verified.">F</td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">500 - COLOR<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">YELLOW</td>
+      <td class=""></td>
+      <td class="">YELLOW</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">501 - CLARITY<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">CLEAR</td>
+      <td class=""></td>
+      <td class="">CLEAR</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol abnVal" style="padding-left:20px">502 - SPECIFIC GRAVITY<sup class="superScript">1</sup></td>
+      <td class="abnVal">1.028</td>
+      <td class="abnVal"></td>
+      <td class="abnVal"></td>
+      <td class="abnVal">1.005-1.025</td>
+      <td class="abnVal" title="Above high normal">H</td>
+      <td class="abnVal" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">503 - pH<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">6.0</td>
+      <td class=""></td>
+      <td class="">5.0-8.5</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">504 - URINE PROTEIN<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">10</td>
+      <td class="">mg/dL</td>
+      <td class="">< 30</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">505 - URINE GLUCOSE<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">NEGATIVE</td>
+      <td class="">mg/dL</td>
+      <td class="">NEGATIVE</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">506 - URINE KETONE<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">NEGATIVE</td>
+      <td class="">mg/dL</td>
+      <td class="">< 10</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">507 - URINE BILIRUBIN<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">NEGATIVE</td>
+      <td class=""></td>
+      <td class="">NEGATIVE</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">508 - URINE BLOOD<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">NEGATIVE</td>
+      <td class=""></td>
+      <td class="">< 1+</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">509 - URINE NITRITE<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">NEGATIVE</td>
+      <td class=""></td>
+      <td class="">NEGATIVE</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">510 - UROBILINOGEN<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">NORMAL</td>
+      <td class="">mg/dL</td>
+      <td class="">NORMAL</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">511 - LEUKOCYTE<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">NEGATIVE</td>
+      <td class="">LEU/uL</td>
+      <td class="">< 75</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol abnVal" style="padding-left:20px">PLSN - *Please Note:<sup class="superScript">1</sup></td>
+      <td class="abnVal"></td>
+      <td class="abnVal"></td>
+      <td class="abnVal"></td>
+      <td class="abnVal"></td>
+      <td class="abnVal" title="Normal">N</td>
+      <td class="abnVal" title="Final result">F</td>
+    </tr>
+    <tr class="obrSpec page-break">
+      <td colspan="100%" class="hl7NoteRow" style="padding-left:20px">Microscopic performed only when UA is abnormal</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">U41 - RED BLOOD CELLS<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">0-2</td>
+      <td class="">/hpf</td>
+      <td class="">0-2</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">U42 - WHITE BLOOD CELLS<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">0-5</td>
+      <td class="">/hpf</td>
+      <td class="">0-5</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="obrName page-break">
+      <td colspan="6">MICU MICROSCOPIC FOR 030U</td>
+      <td title="Final result; results stored and verified.">F</td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">U41 - RED BLOOD CELLS<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">0-2</td>
+      <td class="">/hpf</td>
+      <td class="">0-2</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+    <tr class="page-break">
+      <td colspan="100%" class="hl7NugSep"></td>
+    </tr>
+    <tr class="obxRow page-break">
+      <td class="hl7FirstCol" style="padding-left:20px">U42 - WHITE BLOOD CELLS<sup class="superScript">1</sup></td>
+      <td class=""></td>
+      <td class="">0-5</td>
+      <td class="">/hpf</td>
+      <td class="">0-5</td>
+      <td class="" title="Normal">N</td>
+      <td class="" title="Final result">F</td>
+    </tr>
+  </table>
+  <div class="flagsLegend">
+    <div class="hl7NugSep"> </div>
+    <div class="flags"><span class="flag">H = Above high normal</span><span class="flag">L = Below low normal</span><span class="flag">N = Normal</span></div>
+    <div class="hl7NugSep"> </div>
+  </div>
+  <div class="labTable">
+    <table class="hl7LabInfo" width="100%" border="0" cellspacing="0" cellpadding="0">
+      <div class="labHeader">Performing Laboratory:</div>
+      <tr class="page-break">
+        <td><sup class="superScript">1</sup><div>ACCU REFERENCE MEDICAL LAB</div>
+        </td>
+      </tr>
+      <tr class="page-break">
+        <td>
+          <div> Address: </div>
+          <div>1901 E. LINDEN AVE. SUITE 4, LINDEN, NJ 070361195</div>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div><script type="text/javascript" language="javascript">
+			
+				document.onclick = function () {
+					if (parent.EditApplication)
+					{
+						if (parent.EditApplication.onViewerWindowClick)
+							parent.EditApplication.onViewerWindowClick();
+					}
+					else if (parent.DocViewMain) 
+					{
+						if (parent.DocViewMain.onViewerWindowClick) 
+							parent.DocViewMain.onViewerWindowClick();
+					}
+				};
+
+				window.onload = function() {
+					if (parent.DocViewMain) 
+					{
+						if (parent.DocViewMain.onViewerWindowLoad) 
+							parent.DocViewMain.onViewerWindowLoad();
+					}
+				}
+				
+				var maxWidth = 0;
+				var maxHeight = 0;
+				if (maxWidth > 0 && maxHeight > 0)
+				{
+					document.querySelector('.hl7tableWrapper').style.width = maxWidth +'px';
+						
+					var maxY = maxHeight;
+					var idrand = 0;
+
+					var rows = document.querySelectorAll('.page-break');
+					for (var i = 0; i !== rows.length; ++i)
+					{
+						var row = rows[i];
+						var offsetTop = 0;
+						var offsetParent = row;
+						while (offsetParent)
+						{
+							offsetTop += offsetParent.offsetTop;
+							offsetParent = offsetParent.offsetParent;
+						}
+
+						if ((offsetTop + row.clientHeight) > maxY)
+						{
+							var diff = maxY - offsetTop;
+							var id = row.id || (row.id = 'anonymous_element_'+ idrand++);
+							var cells = document.querySelectorAll('#'+ id +' td');
+							for (var c = 0; c !== cells.length; ++c)
+							{
+								cells[c].style.paddingTop = (diff + parseInt(window.getComputedStyle(cells[c], null).getPropertyValue('padding-top'), 10)) +'px';
+							}
+							
+							maxY += maxHeight;
+						}
+					}
+				}
+			
+		</script>
